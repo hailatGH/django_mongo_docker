@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  db:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hailatdev/django_mongo_docker:latest
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app
+    depends_on:
+      - db
+    environment:
+      SECRET_KEY: EB94C941DCE1455DA48A2CE2F8BEAF50B98704B92B163544AD64DEDEB665C6A2
+      DEBUG: True
+      ALLOWED_HOSTS: 0.0.0.0,127.0.0.1,localhost
+      DB_HOST: db
+      DB_PORT: 27017
+      DB_NAME: mydb
+      DB_USERNAME: root
+      DB_PASSWORD: example
+
+volumes:
+  src:
+  mongo_data:
