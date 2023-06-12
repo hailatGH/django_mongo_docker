@@ -1,5 +1,6 @@
 # Custom
 venv
+src/static
 .dockerignore
 .vscode
 
